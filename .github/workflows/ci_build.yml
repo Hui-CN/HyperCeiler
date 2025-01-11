@@ -70,11 +70,12 @@ jobs:
 
       - name: Find APKs
         run: |
-          if [ ${{ env.IS_DEBUG }} = true ]; then
-            APK_FILE=$(find app/build/outputs/apk/debug -name '*.apk')
-          else
-            APK_FILE=$(find app/build/outputs/apk/canary -name '*.apk')
-          fi
+          APK_FILE=$(find app/build/outputs/apk/debug -name '*.apk')
+          #if [ ${{ env.IS_DEBUG }} = true ]; then
+            #APK_FILE=$(find app/build/outputs/apk/debug -name '*.apk')
+          #else
+            #APK_FILE=$(find app/build/outputs/apk/canary -name '*.apk')
+          #fi
           echo "APK_FILE=$APK_FILE" >> $GITHUB_ENV
           echo "APK_FILE_NAME=$(basename $APK_FILE .apk)" >> $GITHUB_ENV
 
