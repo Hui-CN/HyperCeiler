@@ -113,7 +113,7 @@ jobs:
         run: |
           echo "APK_FILE_CANARY=$(find artifacts -name '*.apk')" >> $GITHUB_ENV
 
-      - #name: Post to Canary Channel
+      #- name: Post to Canary Channel
         #env:
           #CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
           #BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
