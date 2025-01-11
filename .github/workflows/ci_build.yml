@@ -54,12 +54,12 @@ jobs:
           echo storeFile=../key.jks >> signing.properties
           echo ${{ secrets.SIGNING_KEY }} | base64 --decode > key.jks
 
-      - name: Build with Gradle (Canary)
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        shell: bash
-        run: |
-          ./gradlew assembleCanary
-          echo "IS_DEBUG=false" >> $GITHUB_ENV
+      - #name: Build with Gradle (Canary)
+        #if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        #shell: bash
+        #run: |
+          #./gradlew assembleCanary
+          #echo "IS_DEBUG=false" >> $GITHUB_ENV
 
       - name: Build with Gradle (Debug)
         if: github.event_name == 'pull_request'
@@ -113,21 +113,21 @@ jobs:
         run: |
           echo "APK_FILE_CANARY=$(find artifacts -name '*.apk')" >> $GITHUB_ENV
 
-      - name: Post to Canary Channel
-        env:
-          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CANARY: ${{ env.APK_FILE_CANARY }}
-          COMMIT_MESSAGE: |+
-            New push to GitHub
-            ```
-            ${{ github.event.head_commit.message }}
-            ```by `${{ github.event.head_commit.author.name }}`
-            See commit detail [here](${{ github.event.head_commit.url }})
-        run: |
-          ESCAPED=$(python3 -c 'import json,os,urllib.parse; print(urllib.parse.quote(json.dumps(os.environ["COMMIT_MESSAGE"])))')
-          cd ${{ github.workspace }}
-          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://canary%22,%22parse_mode%22:%22MarkdownV2%22,%22caption%22:${ESCAPED}%7D%5D" -F canary="@${CANARY}"
+      - #name: Post to Canary Channel
+        #env:
+          #CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          #BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          #CANARY: ${{ env.APK_FILE_CANARY }}
+          #COMMIT_MESSAGE: |+
+            #New push to GitHub
+            #```
+            #${{ github.event.head_commit.message }}
+            #```by `${{ github.event.head_commit.author.name }}`
+            #See commit detail [here](${{ github.event.head_commit.url }})
+        #run: |
+          #ESCAPED=$(python3 -c 'import json,os,urllib.parse; print(urllib.parse.quote(json.dumps(os.environ["COMMIT_MESSAGE"])))')
+          #cd ${{ github.workspace }}
+          #curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://canary%22,%22parse_mode%22:%22MarkdownV2%22,%22caption%22:${ESCAPED}%7D%5D" -F canary="@${CANARY}"
 
   push_to_debug_group:
     if: github.event_name == 'pull_request'
